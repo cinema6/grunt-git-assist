@@ -7,11 +7,53 @@
  */
 
 'use strict';
-
 module.exports = function(grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+    grunt.registerTask('gitLastCommit','Get a version using git commit', function(){
+        var done = this.async(),
+            options = this.options({
+                versionFile : null,
+                config      : 'gitLastCommit'
+            });
+
+        grunt.util.spawn({
+            cmd     : 'git',
+            args    : ['log','-n1','--format={ "commit" : "%h", "date" : "%ct" , "subject" : "%s" }']
+        },function(err,result){
+            var data;
+            if (err) {
+                grunt.log.errorlns('grunt-git-assist: Failed to get gitLastCommit - ' + err);
+                return done(false);
+            }
+
+            try {
+                data = JSON.parse(result);
+            }
+            catch(e){
+                grunt.log.errorlns('grunt-git-assist: unexpected result - ' + result);
+            }
+
+            if ((data === undefined) || (data.commit === undefined) ||
+                (data.date === undefined)){
+                grunt.log.errorlns('grunt-git-assist: Failed to parse git version.');
+                return done(false);
+            }
+
+            data.date = new Date(data.date * 1000);
+            if (options.versionFile !== null){
+                grunt.file.write(options.versionFile,JSON.stringify(data),
+                        { encoding: 'utf8' });    
+            }
+
+            if (typeof options.config === 'string'){
+                grunt.config(options.config,data);
+            } else
+            if (typeof options.config === 'function'){
+                options.config(data);
+            }
+            done(true);
+        });
+    });
 
   grunt.registerMultiTask('git_assist', 'Plugin for helping out with git tasks.', function() {
     // Merge task-specific and/or target-specific options with these defaults.

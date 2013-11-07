@@ -8,6 +8,7 @@
 
 'use strict';
 
+var settings = {};
 module.exports = function(grunt) {
 
   // Project configuration.
@@ -26,6 +27,13 @@ module.exports = function(grunt) {
     // Before generating any new files, remove any previously-created files.
     clean: {
       tests: ['tmp'],
+    },
+
+    gitLastCommit: {
+        options : {
+            versionFile : (__dirname + '/verion.json'),
+            config : function(data) { settings.gitLastCommit = data; }
+        }
     },
 
     // Configuration to be run (and then tested).
@@ -62,6 +70,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+
+  grunt.registerTask('get-gitLastCommit',function(){
+        grunt.log.writelns(JSON.stringify(settings));
+  });
+  
+  grunt.registerTask('test-gitLastCommit',['gitLastCommit','get-gitLastCommit']);
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
