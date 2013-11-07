@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:cinema6/grunt-git-assist.git"
+    "url": "git@github.com:cinema6/grunt-git-assist.git"
   },
   "bugs": {
     "url": ""
