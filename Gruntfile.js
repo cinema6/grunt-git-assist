@@ -29,10 +29,39 @@ module.exports = function(grunt) {
       tests: ['tmp'],
     },
 
-    gitLastCommit: {
+    submodule_add: {
+        jquery : {
+            repo : "git@github.com:cinema6/jquery.git",
+            path : "vendor/jquery"
+        },
+
+        test2 : {
+            repo : "git@dfdfdfdf"
+        }
+    },
+
+    submodule_add_remotes : {
+        jquery : {
+            path    : "vendor/jquery",
+            remotes : {
+                "upstream"  : "https://github.com/jquery/jquery.git" 
+            }
+        }
+    },
+
+    submodule_build : {
+
+        jquery : {
+            path    : "vendor/jquery",
+            target  : "lib/jq"
+        }
+
+    },
+
+    git_last_commit: {
         options : {
             versionFile : (__dirname + '/verion.json'),
-            config : function(data) { settings.gitLastCommit = data; }
+            config : function(data) { settings.git_last_commit = data; }
         }
     },
 
@@ -71,11 +100,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-  grunt.registerTask('get-gitLastCommit',function(){
+  grunt.registerTask('get-git_last_commit',function(){
         grunt.log.writelns(JSON.stringify(settings));
   });
   
-  grunt.registerTask('test-gitLastCommit',['gitLastCommit','get-gitLastCommit']);
+  grunt.registerTask('test-git_last_commit',['git_last_commit','get-git_last_commit']);
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
