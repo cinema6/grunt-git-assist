@@ -112,14 +112,15 @@ module.exports = function(grunt) {
         }
 
         (function spawn(argsList){
-            var args = argsList.shift();
+            var args = argsList.shift(), subdir;
             if (!args){
                 done(true);
                 return;
             }
             grunt.util.spawn({
                 cmd : 'git',
-                args : args
+                args : args,
+                opts : { cwd : data.path }
             },function(error/*,result,code*/){
                 if ((error) && (error.message.match(/remote .* already exists/) === null)) {
                     grunt.log.errorlns('submodule_add_remotes:' + target + ' - failed: ' + error);
