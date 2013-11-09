@@ -58,6 +58,14 @@ module.exports = function(grunt) {
 
     },
 
+    submodule_version : {
+
+        jquery : {
+            path    : "vendor/jquery"
+        }
+
+    },
+
     git_last_commit: {
         options : {
             versionFile : (__dirname + '/verion.json'),
