@@ -114,7 +114,7 @@ module.exports = function(grunt) {
 
         function upload(currCommit){
             grunt.log.notverbose.writeln('push');
-            return spawn({cmd : 'git', args : ['push','origin', 'master'],
+            return spawn({cmd : 'git', args : ['push','--tags','origin','master'],
                         opts : { cwd : data.path } })
             .then(function(result){
                 logResult(result);
