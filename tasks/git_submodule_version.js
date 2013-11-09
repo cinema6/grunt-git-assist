@@ -28,7 +28,7 @@ module.exports = function(grunt) {
             cmd : 'git',
             args : ['describe','--tags','--long'],
             opts : { cwd : data.path }
-        },function(error/*,result,code*/){
+        },function(error,result/*,code*/){
             if (error) {
                 grunt.log.errorlns('submodule_version:' + target + ' - failed: ' + error);
                 done(false);
