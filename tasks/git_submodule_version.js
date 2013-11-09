@@ -35,7 +35,13 @@ module.exports = function(grunt) {
                 return;
             }
 
-            grunt.log.writelns('submodule_version:' + target + ' = ' + result);
+            var versionData = grunt.config('submodule_versions');
+            if (versionData === undefined){
+                versionData = {};
+            }
+            versionData[target] = result.stdout;
+
+            grunt.config('submodule_versions',versionData);
             done(true);
         });
     });

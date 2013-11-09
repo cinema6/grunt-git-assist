@@ -11,6 +11,17 @@
 var settings = {};
 module.exports = function(grunt) {
 
+    var modules = {
+        jquery : {
+            repo : "git@github.com:cinema6/jquery.git",
+            path : "vendor/jquery",
+            target  : "lib/jq",
+            remotes : {
+                "upstream"  : "https://github.com/jquery/jquery.git" 
+            }
+         }
+    };
+
   // Project configuration.
   grunt.initConfig({
     jshint: {
@@ -29,42 +40,13 @@ module.exports = function(grunt) {
       tests: ['tmp'],
     },
 
-    submodule_add: {
-        jquery : {
-            repo : "git@github.com:cinema6/jquery.git",
-            path : "vendor/jquery"
-        },
+    submodule_add: modules,
 
-        test2 : {
-            repo : "git@dfdfdfdf"
-        }
-    },
+    submodule_add_remotes : modules,
 
-    submodule_add_remotes : {
-        jquery : {
-            path    : "vendor/jquery",
-            remotes : {
-                "upstream"  : "https://github.com/jquery/jquery.git" 
-            }
-        }
-    },
+    submodule_build : modules,
 
-    submodule_build : {
-
-        jquery : {
-            path    : "vendor/jquery",
-            target  : "lib/jq"
-        }
-
-    },
-
-    submodule_version : {
-
-        jquery : {
-            path    : "vendor/jquery"
-        }
-
-    },
+    submodule_version : modules,
 
     git_last_commit: {
         options : {
@@ -108,10 +90,16 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
+  grunt.registerTask('get-versions',function(){
+        grunt.log.writelns('JQUERY VERSION:',JSON.stringify(grunt.config('submodule_versions')));
+  });
+
   grunt.registerTask('get-git_last_commit',function(){
         grunt.log.writelns(JSON.stringify(settings));
   });
-  
+ 
+  grunt.registerTask('test-versions',['submodule_version','get-versions']);
+
   grunt.registerTask('test-git_last_commit',['git_last_commit','get-git_last_commit']);
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
