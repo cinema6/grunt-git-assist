@@ -36,6 +36,7 @@ module.exports = function(grunt) {
             }
 
             grunt.log.writelns('submodule_version:' + target + ' = ' + result);
+            done(true);
         });
     });
 };
