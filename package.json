@@ -1,7 +1,7 @@
 {
   "name": "grunt-git-assist",
   "description": "Plugin for helping out with git tasks.",
-  "version": "0.6.5",
+  "version": "0.7.0",
   "homepage": "",
   "author": {
     "name": "howard",
@@ -38,5 +38,8 @@
   },
   "keywords": [
     "gruntplugin"
-  ]
+  ],
+  "dependencies": {
+    "q": "~0.9.7"
+  }
 }
