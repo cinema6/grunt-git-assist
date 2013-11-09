@@ -12,14 +12,33 @@ var settings = {};
 module.exports = function(grunt) {
 
     var modules = {
-        jquery : {
-            repo : "git@github.com:cinema6/jquery.git",
-            path : "vendor/jquery",
-            target  : "lib/jq",
-            remotes : {
-                "upstream"  : "https://github.com/jquery/jquery.git" 
-            }
-         }
+        "angular.js"    : {
+            "buildDir"  : "build",
+            "grunt"     : ["package"],
+            "npm"       : true,
+            "path"      : "src/angular",
+            "remotes"   : { "upstream"  : "https://github.com/angular/angular.js.git" },
+            "repo"      : "git@github.com:cinema6/angular.js.git",
+            "target"    : "lib/angular"
+        },
+        "GreenSock-JS"  : {
+            "buildDir"  : "src/minified", 
+            "grunt"     : false ,
+            "npm"       : false, 
+            "path"      : "src/gsap",
+            "remotes"   : { "upstream"  : "https://github.com/greensock/GreenSock-JS.git"},
+            "repo"      : "git@github.com:cinema6/GreenSock-JS.git",
+            "target"    : "lib/gsap"
+        },
+        "jquery"        : {
+            "buildDir"  : "dist",
+            "grunt"     : [],
+            "npm"       : true,
+            "path"      : "src/jquery",
+            "remotes"   : { "upstream"  : "https://github.com/jquery/jquery.git" },
+            "repo"      : "git@github.com:cinema6/jquery.git",
+            "target"    : "lib/jquery"
+        }
     };
 
   // Project configuration.
@@ -45,6 +64,8 @@ module.exports = function(grunt) {
     submodule_add_remotes : modules,
 
     submodule_build : modules,
+
+    submodule_sync : modules,
 
     submodule_version : modules,
 

@@ -12,6 +12,24 @@ var q=require('q');
 
 module.exports = function(grunt) {
 
+    function spawn(opts){
+        var deferred = q.defer();
+        grunt.verbose.writelns('spawn: ' + JSON.stringify(opts));
+        grunt.util.spawn(opts,function(error,result,code){
+
+            if (error){
+                grunt.verbose.errorlns('error: ' + error.message);
+                deferred.reject(error);
+                return;
+            }
+
+            grunt.verbose.writelns('returns: ' + JSON.stringify([result,code]));
+            deferred.resolve([result,code]);
+        });
+
+        return deferred.promise;
+    }
+
     grunt.registerMultiTask('submodule_sync','Sync remote to origin.',function(){
         var target  = this.target,
             data    = this.data,
@@ -19,23 +37,22 @@ module.exports = function(grunt) {
                 remote : 'upstream'
                 }),
             done    = this.async(),
-            spawn = q.nbind(grunt.util.spawn,grunt.util),
             placeholder,
             remote;
         
         if (!data.repo){
-            grunt.log.errorlns('submodule_add:' + target + ' - fails, no repo');
+            grunt.log.errorlns('submodule_sync:' + target + ' - fails, no repo');
             return done(false);
         }
     
         if (!data.path){
-            grunt.log.errorlns('submodule_add:' + target + ' - fails, no path');
+            grunt.log.errorlns('submodule_sync:' + target + ' - fails, no path');
             return done(false);
         }
     
         remote =  data.remotes && data.remotes[options.remote];
         if (!remote){
-            grunt.log.errorlns('submodule_add:' + target +
+            grunt.log.errorlns('submodule_sync:' + target +
                 ' - fails, no remote: ' + options.remote);
             return done(false);
         }
@@ -61,7 +78,7 @@ module.exports = function(grunt) {
 
         function fetchRemote(currCommit){
             grunt.log.notverbose.writeln('fetch ' + options.remote);
-            return spawn({cmd : 'git', args : ['fetch',remote],
+            return spawn({cmd : 'git', args : ['fetch',options.remote],
                         opts : { cwd : data.path } })
             .then(function(result){
                 logResult(result);
