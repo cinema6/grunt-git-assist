@@ -52,9 +52,15 @@ module.exports = function(grunt) {
     
         remote =  data.remotes && data.remotes[options.remote];
         if (!remote){
-            grunt.log.errorlns('submodule_sync:' + target +
-                ' - fails, no remote: ' + options.remote);
-            return done(false);
+            if (options.skipOnMissingRemote){
+                grunt.log.writeln('submodule_sync:' + target +
+                    ' - skipped, no remote configured.');
+                return done(true);
+            } else {
+                grunt.log.errorlns('submodule_sync:' + target +
+                    ' - failed, no remote configured.');
+                return done(false);
+            }
         }
 
         function logResult(result){
