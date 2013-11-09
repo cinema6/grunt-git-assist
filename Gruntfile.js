@@ -64,6 +64,8 @@ module.exports = function(grunt) {
     submodule_add_remotes : modules,
 
     submodule_build : modules,
+    
+    submodule_checkout : modules,
 
     submodule_sync : modules,
 

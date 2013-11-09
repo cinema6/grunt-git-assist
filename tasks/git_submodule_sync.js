@@ -34,8 +34,11 @@ module.exports = function(grunt) {
         var target  = this.target,
             data    = this.data,
             options = this.options({
-                remote : 'upstream'
-                }),
+                sync : {
+                    remote : 'upstream',
+                    skipIfNoRemote : false
+                }
+            }),
             done    = this.async(),
             placeholder,
             remote;
@@ -50,9 +53,9 @@ module.exports = function(grunt) {
             return done(false);
         }
     
-        remote =  data.remotes && data.remotes[options.remote];
+        remote =  data.remotes && data.remotes[options.sync.remote];
         if (!remote){
-            if (options.skipSyncIfNoRemote){
+            if (options.sync.skipIfNoRemote){
                 grunt.log.writeln('submodule_sync:' + target +
                     ' - skipped, no remote configured.');
                 return done(true);
@@ -83,8 +86,8 @@ module.exports = function(grunt) {
         }
 
         function fetchRemote(currCommit){
-            grunt.log.notverbose.writeln('fetch ' + options.remote);
-            return spawn({cmd : 'git', args : ['fetch',options.remote],
+            grunt.log.notverbose.writeln('fetch ' + options.sync.remote);
+            return spawn({cmd : 'git', args : ['fetch',options.sync.remote],
                         opts : { cwd : data.path } })
             .then(function(result){
                 logResult(result);
@@ -104,7 +107,7 @@ module.exports = function(grunt) {
 
         function mergeMaster(currCommit){
             grunt.log.notverbose.writeln('merge');
-            return spawn({cmd : 'git', args : ['merge', options.remote + '/master'],
+            return spawn({cmd : 'git', args : ['merge', options.sync.remote + '/master'],
                         opts : { cwd : data.path } })
             .then(function(result){
                 logResult(result);
