@@ -53,7 +53,7 @@ module.exports = function(grunt) {
             return done(false);
         }
     
-        remote =  data.remotes && data.remotes[options.sync.remote];
+        remote =  data.remotes && data.remotes[options.remote];
         if (!remote){
             if (options.sync.skipIfNoRemote){
                 grunt.log.writeln('submodule_sync:' + target +
