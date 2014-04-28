@@ -78,6 +78,10 @@ module.exports = function(grunt) {
         }
     },
 
+    git_describe_tags: {
+        default : {}
+    },
+
     // Configuration to be run (and then tested).
     git_assist: {
       default_options: {
