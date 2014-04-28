@@ -78,6 +78,7 @@ module.exports = function(grunt) {
         }
     },
 
+
     // Configuration to be run (and then tested).
     git_assist: {
       default_options: {
@@ -124,6 +125,15 @@ module.exports = function(grunt) {
   grunt.registerTask('test-versions',['submodule_version','get-versions']);
 
   grunt.registerTask('test-git_last_commit',['git_last_commit','get-git_last_commit']);
+
+  grunt.registerTask('dumpConfig',function(prop){
+        var obj = grunt.config.get(prop);
+        if (prop){
+            grunt.log.write(prop + ' = ');
+        }
+        grunt.log.writelns(JSON.stringify(obj,null,3));
+  });
+  grunt.registerTask('test-git_describe', ['git_describe_tags','dumpConfig:git_tag']); 
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
