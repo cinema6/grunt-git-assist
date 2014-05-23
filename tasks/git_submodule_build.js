@@ -48,6 +48,14 @@ module.exports = function(grunt) {
                         next(error,code);
                     });
                 },
+              gulpBuild = function(next){
+                    var spawnOpts = { cmd : 'gulp', args : data.gulp,
+                      opts : { cwd : data.path, env : process.env }
+                    };
+                    grunt.util.spawn( spawnOpts, function(error, result, code) {
+                        next(error,code);
+                    });
+                },
               cleanBuild = function(next){
                     if (grunt.file.exists(data.build)){
                         grunt.file.delete(data.build);
@@ -130,6 +138,11 @@ module.exports = function(grunt) {
         if ((data.grunt === undefined) || (data.grunt !== false))  {
             subTasks.push({ name : 'clean-build', func : cleanBuild });
             subTasks.push({ name : 'grunt', func : gruntBuild });
+        }
+
+        if (data.gulp) {
+            subTasks.push({ name : 'clean-build', func : cleanBuild });
+            subTasks.push({ name : 'gulp', func : gulpBuild });
         }
 
         if ((data.copy === undefined) || (data.copy) ){
