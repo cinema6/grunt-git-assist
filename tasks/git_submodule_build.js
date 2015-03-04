@@ -69,17 +69,23 @@ module.exports = function(grunt) {
                     next();
                 },
               copy= function(next){
-                    var files = grunt.file.expand({ cwd : data.build},'**/*.*'),
-                        cont = true,targetFile,abspath;
+                    var files = grunt.file.expand({ cwd : data.build},'**')
+                        .map(function(file) {
+                            return {
+                                src: path.join(data.build, file),
+                                dest: path.join(targetPath, file)
+                            };
+                        }).filter(function(file) {
+                            return grunt.file.isFile(file.src);
+                        }),
+                        cont = true;
                     files.forEach(function(file){
                         //grunt.log.writelns('FILE: ' + file);
                         if (cont){
-                            abspath     = path.join(data.build,file);
-                            targetFile  = path.join(targetPath,file);
-                            grunt.file.copy(abspath,targetFile);
-                            if (!grunt.file.exists(targetFile)) {
-                                next( new Error('Failed to copy ' + abspath +
-                                                    ' ==> ' + targetFile));
+                            grunt.file.copy(file.src, file.dest);
+                            if (!grunt.file.exists(file.dest)) {
+                                next( new Error('Failed to copy ' + file.src +
+                                                    ' ==> ' + file.dest));
                                 cont = false;
                                 return;
                             }
